@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="profile-img">
+               
+            </div>
+            <h2>Login Page</h2>
+            <p>Name: Nichapat Rodpranee,</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                    <span id="togglePassword" class="toggle-password">Show</span>
+                </div>
+                <div class="input-group">
+                    <label for="role">Select your role</label>
+                    <select id="role">
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="lecturer">Lecturer</option>
+                    </select>
+                </div>
+                <button type="submit" id="loginButton" disabled>Login</button>
+            </form>
+            <button id="logoutButton" class="logout-button">Logout</button>
+        </div>
+    </div>
+
+    <script src="js.script.js"></script>
+</body>
+</html>
