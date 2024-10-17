@@ -1,76 +1,68 @@
-function submitLogin() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
 
-    fetch('/api/auth', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('message').innerText = data.message;
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-
-
-function call_REST_API_Hello() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    const url = (
-        'http://localhost:8080/hello?' +
-        new URLSearchParams({ myName: username, lastName: password}).toString()
-      );
-    
-    fetch(url)
-    .then(data => {
-        document.getElementById('message').innerText = data.message;
-    })
-    .catch(error => console.error('Error:', error));
-}
-const username = document.getElementById('username');
-const password = document.getElementById('password');
-const role = document.getElementById('role');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const roleSelect = document.getElementById('role');
 const loginButton = document.getElementById('loginButton');
-const logoutButton = document.getElementById('logoutButton');
 const togglePassword = document.getElementById('togglePassword');
+const icon = togglePassword.querySelector('i');
+const emailError = document.getElementById('emailError');
 
-// Enable or disable login button based on form completion
-document.getElementById('loginForm').addEventListener('input', () => {
-    if (username.value && password.value && role.value) {
+
+document.getElementById('username').addEventListener("input",check)
+document.getElementById('password').addEventListener("input",check)
+document.getElementById('role').addEventListener("input",check)
+
+function check() {
+    if (usernameInput.value && passwordInput.value && roleSelect.value) {
         loginButton.disabled = false;
     } else {
         loginButton.disabled = true;
     }
-});
 
-// Toggle password visibility
-togglePassword.addEventListener('click', () => {
-    if (password.type === 'password') {
-        password.type = 'text';
-        togglePassword.textContent = 'Hide';
+    const usernamePattern = /^[0-9]/;
+    if (usernamePattern.test(username.value)) {
+        emailError.textContent = "";
     } else {
-        password.type = 'password';
-        togglePassword.textContent = 'Show';
+        emailError.textContent = "Please Enter your ID";
+
     }
-});
+}
 
-// Login button action
-loginButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    alert('Login Successful!');
-});
 
-// Logout button action
-logoutButton.addEventListener('click', () => {
-    username.value = '';
-    password.value = '';
-    role.value = '';
-    loginButton.disabled = true;
-    alert('You have been logged out.');
+function go(){
+    const usernameInput = document.getElementById('username').value;
+    const passwordInput = document.getElementById('password').value;
+
+    fetch('https://restapi.tu.ac.th/api/v1/auth/Ad/verify', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Application-Key': 'TUecac773883f2433fc71a4432562774ce8872bf7fc11dfa548c5808ba62166ed387af71abcc56b4f6da1014ea0197c7d6' // ใส่ token ใน Authorization Header
+        },
+        body: JSON.stringify({ UserName : usernameInput , PassWord : passwordInput}) // ส่งข้อมูลเป็น JSON
+    })
+    .then(response => response.json()) // แปลง response กลับมาเป็น JSON
+    .then(json =>{
+        console.log(json);
+        document.getElementById("space1").innerText = json.displayname_en;
+        document.getElementById("space2").innerText = json.username;
+        document.getElementById("space3").innerText = json.type;
+
+    });
+}
+
+
+togglePassword.addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    
+    // แสดงหรือซ่อนรหัส
+    if (type === 'password') {
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    } else {
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    }
 });
